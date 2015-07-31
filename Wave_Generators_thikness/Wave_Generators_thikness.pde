@@ -1,3 +1,13 @@
+////////
+// The following code will simulate the simple addition of sine waves
+// The waves are modeled as circular waves radiating from a single point 
+// If the wave desired is linear just set the center of the wave very far away
+// Adding a floor will allow you to chose differnt gradients to shift the center gravity
+// You can also creat your own gradients and explore how the mass behaves
+// any questions let me know: sebmoralesprado@gmail.com
+// July 2015
+////////
+
 import peasy.*;
 PeasyCam cam;
 import controlP5.*;    // import controlP5 library
@@ -8,25 +18,25 @@ ControlP5 controlP5;   // controlP5 object
 boolean writing=false,writingFloor=false;
 boolean floorPresent=false;
 
-float divider=1.5625;
-int canvasWidth=int(1300/divider);
-int canvasHeight=int(350/divider);
-int sparcityPoints=2; //every 'n' pixels there is a point
+float scale=.5;
+int canvasWidth=int(1300*scale);
+int canvasHeight=int(350*scale);
+int sparcityPoints=5; //How close together are the verticies, lower sparcities (1) will give better surfaces but are slower and harder to work with
 int cols, rows;
 ArrayList<PVector> points=new ArrayList();
 
-//wave 1:
+//WAVES:
 float amp1, amp2, amp3, amp4, amp5,amp6;
 float frq1, frq2, frq3, frq4, frq5,frq6;
 int direction1, direction2, direction3, direction4, direction5,direction6; 
 int distance1, distance2, distance3, distance4, distance5,distance6;
-boolean Wave1, Wave2, Wave3, Wave4, Wave5,Wave6,floor,centroids;
-
-int age1,age2,age3,age4,age5,age6;
+boolean Wave1, Wave2, Wave3, Wave4, Wave5,Wave6;
+int age1,age2,age3,age4,age5,age6; //age refers to how many cycles will the wave live before stopping
 float z, z1, z2, z3, z4, z5,z6, zNeg;
 float zMax=0;
 float zMin=0;
 float radians=0.0174532925;
+
 PrintWriter write;
 PrintWriter writeFloor;
 
@@ -34,7 +44,9 @@ PrintWriter writeFloor;
 float[] zRowSum= new float[canvasHeight/sparcityPoints];
 float[] zRowMult= new float[canvasHeight/sparcityPoints];
 float Floor=0;
+boolean floor,centroids;
 
+//Menus
 int topMenu=40;
 int sideMenu=120;
 int minThickness=10;
@@ -97,22 +109,16 @@ void setup() {
 
 
   controlP5.setAutoDraw(false);
-
   cols = canvasWidth/sparcityPoints;
   rows = canvasHeight/sparcityPoints;
-
   cam = new PeasyCam(this,(canvasWidth/2)-100,canvasHeight/2,0, 1000);
   cam.setMinimumDistance(0);
   cam.setMaximumDistance(3000);
-
- // gradient=loadImage("gradient3.jpg");
-  //loadPixels();
 }
 
 void draw() {
   background(0);
   for (int i = 0; i < rows; i++) {
-    // Begin loop for cols
     for (int j = 0; j < cols; j++) {
       int x = j*sparcityPoints;
       int y = i*sparcityPoints;
@@ -226,7 +232,7 @@ void gui() {
   cam.beginHUD();
   controlP5.draw();
   //textSize(10);
-  text("Max Z diff: "+ (zMax-zMin)*divider,sideMenu-80+30,topMenu+738);
+  text("Max Z diff: "+ (zMax-zMin)*scale,sideMenu-80+30,topMenu+738);
   text("Sebastian Morales | adorevolution.com | Julio 2015",width-200, height-20);
   cam.endHUD();
   hint(ENABLE_DEPTH_TEST);
